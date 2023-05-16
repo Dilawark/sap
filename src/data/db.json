@@ -1,0 +1,60 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Waqar",
+      "sex": "Male",
+      "dateOfBirth": "2023-05-14",
+      "place": "Sialkot",
+      "groups": "Black magicians"
+    },
+    {
+      "id": 2,
+      "name": "Dilawar Khan",
+      "sex": "Male",
+      "dateOfBirth": "1999-05-10",
+      "place": "Zhob",
+      "groups": "React"
+    },
+    {
+      "id": 3,
+      "name": "Rashid",
+      "sex": "Male",
+      "dateOfBirth": "2000-05-07",
+      "place": "Chiniot",
+      "groups": "Typography"
+    },
+    {
+      "id": 4,
+      "name": "Rashid",
+      "sex": "Male",
+      "dateOfBirth": "2023-05-08",
+      "place": "Chiniot",
+      "groups": "Lame gamer boys"
+    },
+    {
+      "id": 5,
+      "name": "Dilawar Khan",
+      "sex": "Male",
+      "dateOfBirth": "2023-05-23",
+      "place": "Lahore",
+      "groups": "Web designers"
+    },
+    {
+      "id": 6,
+      "name": "Rashid",
+      "sex": "Male",
+      "dateOfBirth": "2023-05-06",
+      "place": "Gujranwala",
+      "groups": "Chemistry, Black magicians, web deginers"
+    },
+    {
+      "id": 7,
+      "name": "Dilawar Khan",
+      "sex": "Male",
+      "dateOfBirth": "2023-05-24",
+      "place": "Zhob",
+      "groups": "abc"
+    }
+  ]
+}
