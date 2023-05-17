@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Container, Button } from "@mui/material";
 
-const Nav = () => {
+function Nav() {
   return (
     <AppBar variant="outlined">
       <Toolbar sx={{ bgcolor: "rgba(196,207,217,255)" }}>
@@ -13,6 +13,6 @@ const Nav = () => {
       </Toolbar>
     </AppBar>
   );
-};
+}
 
 export default Nav;

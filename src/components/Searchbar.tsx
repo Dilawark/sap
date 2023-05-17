@@ -7,15 +7,15 @@ import {
   Checkbox,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import React from "react";
+import React, { useState } from "react";
 
 type SearchbarProps = {
   handleSearch: (value: string, filters: string[]) => void;
   isChecked: string[];
 };
 
-const Searchbar: React.FC<SearchbarProps> = ({ handleSearch, isChecked }) => {
-  const [searchValue, setSearchValue] = React.useState("");
+function Searchbar({ handleSearch, isChecked }: SearchbarProps) {
+  const [searchValue, setSearchValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -32,7 +32,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ handleSearch, isChecked }) => {
       handleSearch(searchValue, isChecked.filter((filter) => filter !== value));
     }
   };
-  
+
   return (
     <Box bgcolor="white" height="550px">
       <Box sx={{ paddingLeft: "20px", paddingTop: "20px" }}>
@@ -83,6 +83,6 @@ const Searchbar: React.FC<SearchbarProps> = ({ handleSearch, isChecked }) => {
       </Box>
     </Box>
   );
-};
+}
 
 export default Searchbar;

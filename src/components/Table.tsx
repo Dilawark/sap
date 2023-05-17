@@ -41,7 +41,7 @@ type TablePropTypes = {
   results: StudentTypes[];
 };
 
-const Table: React.FC<TablePropTypes> = ({ results }) => {
+function Table({ results }: TablePropTypes) {
   //<------------DataDrid Columns------------>
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 60, sortable: false },
