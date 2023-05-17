@@ -34,7 +34,7 @@ const Searchbar: React.FC<SearchbarProps> = ({ handleSearch, isChecked }) => {
   };
   
   return (
-    <Box bgcolor="white" height="524px">
+    <Box bgcolor="white" height="550px">
       <Box sx={{ paddingLeft: "20px", paddingTop: "20px" }}>
         <Typography variant="subtitle2">SEARCH FOR NAME</Typography>
         <TextField

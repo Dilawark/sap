@@ -3,13 +3,14 @@ import Nav from "./components/Nav";
 import Searchbar from "./components/Searchbar";
 import Table from "./components/Table";
 import React from "react";
+import { API_BASE_URL } from './routes'
 
 function App() {
   const [results, setResults] = React.useState([]);
   const [isChecked, setIsChecked] = React.useState<string[]>([]);
 
   const handleSearch = (value: string, filters: string[]) => {
-    const API_URL = "http://localhost:8000/students";
+    const API_URL = `${API_BASE_URL}/students`;
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
@@ -27,7 +28,7 @@ function App() {
   };
 
   return (
-    <Box>
+    <Box sx={{marginBottom: '50px'}}>
       <Nav />
       <Container>
         <Grid container sx={{ marginTop: "100px" }}>

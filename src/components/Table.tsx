@@ -11,7 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GridCellParams } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import apiRequest from "../apiRequest";
+import { API_BASE_URL } from "../routes";
 
 //<------------Change DataGrid Checkbox Color------------>
 const theme = createTheme({
@@ -148,7 +148,7 @@ const Table: React.FC<TableProps> = ({ results }) => {
   };
 
   //<------------REST API to Fetch data from JSON File------------>
-  const API_URL = "http://localhost:8000/students";
+  const API_URL = `${API_BASE_URL}/students`;
   const [student, setStudent] = React.useState<Student[]>([]);
 
   //<------------Read Data from LocalStorage------------>
@@ -286,7 +286,7 @@ const Table: React.FC<TableProps> = ({ results }) => {
         marginLeft: "0",
         paddingRight: "20px",
         width: "750px",
-        height: "524px",
+        height: "550px",
       }}
     >
       <Grid container sx={{ paddingTop: "20px", paddingBottom: "40px" }}>
