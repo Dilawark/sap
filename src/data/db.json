@@ -2,7 +2,7 @@
   "students": [
     {
       "id": 1,
-      "name": "Waqar",
+      "name": "Waqar khan",
       "sex": "Male",
       "dateOfBirth": "2023-05-14",
       "place": "Sialkot",
@@ -50,11 +50,11 @@
     },
     {
       "id": 7,
-      "name": "Dilawar Khan",
+      "name": "Abdul Wahab",
       "sex": "Male",
-      "dateOfBirth": "2023-05-24",
-      "place": "Zhob",
-      "groups": "abc"
+      "dateOfBirth": "1995-06-16",
+      "place": "Lahore",
+      "groups": "Web designers"
     }
   ]
 }

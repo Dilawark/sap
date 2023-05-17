@@ -1,17 +1,17 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GridCellParams } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { API_BASE_URL } from "../routes";
+import { API_BASE_URL } from "../routes/routes";
+import StudentAddModal from "./StudentAddModal";
 
 //<------------Change DataGrid Checkbox Color------------>
 const theme = createTheme({
@@ -28,33 +28,20 @@ const theme = createTheme({
   },
 });
 
-//<------------Modal (Form) Styles------------>
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-interface Student {
+type StudentTypes = {
   id: number;
   name: string;
   sex: string;
   dateOfBirth: string;
   place: string;
   groups: string;
-}
+};
 
-interface TableProps {
-  results: Student[];
-}
+type TablePropTypes = {
+  results: StudentTypes[];
+};
 
-const Table: React.FC<TableProps> = ({ results }) => {
+const Table: React.FC<TablePropTypes> = ({ results }) => {
   //<------------DataDrid Columns------------>
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 60, sortable: false },
@@ -133,10 +120,10 @@ const Table: React.FC<TableProps> = ({ results }) => {
   };
 
   //<------------Modal (Form) useState and Functions------------>
-  const [open, setOpen] = React.useState<boolean>(false);
-  const handleOpen = () => setOpen(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
-    setOpen(false);
+    setIsOpen(false);
     setInputs({
       id: 0,
       name: "",
@@ -149,15 +136,7 @@ const Table: React.FC<TableProps> = ({ results }) => {
 
   //<------------REST API to Fetch data from JSON File------------>
   const API_URL = `${API_BASE_URL}/students`;
-  const [student, setStudent] = React.useState<Student[]>([]);
-
-  //<------------Read Data from LocalStorage------------>
-  // React.useEffect(() => {
-  //   const storedStudents = localStorage.getItem('studentData');
-  //   if (storedStudents) {
-  //     setStudent(JSON.parse(storedStudents));
-  //   }
-  // }, []);
+  const [student, setStudent] = React.useState<StudentTypes[]>([]);
 
   React.useEffect(() => {
     const fetchStudents = async () => {
@@ -175,20 +154,15 @@ const Table: React.FC<TableProps> = ({ results }) => {
     };
     setTimeout(() => {
       fetchStudents();
-    }, 500);
+    }, 200);
   }, []);
-
-  //<------------Store Data to LocalSrorage------------>
-  // React.useEffect(() => {
-  //   localStorage.setItem("studentData",  JSON.stringify(student))
-  // }, [student])
 
   //<------------User Interaction useState------------>
   const [isLoading, setIsLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState(null);
 
   //<------------Modal Inputs useState------------>
-  const [inputs, setInputs] = React.useState<Student>({
+  const [inputs, setInputs] = React.useState<StudentTypes>({
     id: 0,
     name: "",
     sex: "",
@@ -198,8 +172,8 @@ const Table: React.FC<TableProps> = ({ results }) => {
   });
 
   //<------------Form TextField Change Function------------>
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     let updatedValue = value;
     if (name === "name") {
       updatedValue = value.replace(/[^A-Za-z\s]/g, "");
@@ -220,7 +194,7 @@ const Table: React.FC<TableProps> = ({ results }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputs.id === 0) {
-      const newStudent: Student = {
+      const newStudent: StudentTypes = {
         id: student.length + 1,
         name: inputs.name,
         sex: inputs.sex,
@@ -302,87 +276,18 @@ const Table: React.FC<TableProps> = ({ results }) => {
             New
           </Button>
           {/* <------------Modal Form------------> */}
-          <Modal
-            open={open}
+          <StudentAddModal
+            isOpen={isOpen}
             onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  name="name"
-                  value={inputs.name}
-                  onChange={handleChange}
-                  type="text"
-                  sx={{ marginBottom: 2, display: "block" }}
-                  placeholder="Name"
-                  variant="outlined"
-                  required
-                />
-                <TextField
-                  name="sex"
-                  value={inputs.sex}
-                  onChange={handleChange}
-                  type="text"
-                  sx={{ marginBottom: 3, display: "block" }}
-                  placeholder="Gender"
-                  variant="outlined"
-                  required
-                />
-                <TextField
-                  name="place"
-                  value={inputs.place}
-                  onChange={handleChange}
-                  type="text"
-                  sx={{ marginBottom: 3, paddingRight: "12px" }}
-                  placeholder="Place of Birth"
-                  variant="outlined"
-                  required
-                />
-                <TextField
-                  name="dateOfBirth"
-                  value={inputs.dateOfBirth}
-                  onChange={handleChange}
-                  type="date"
-                  sx={{ marginBottom: 3 }}
-                  placeholder="Date of Birth"
-                  variant="outlined"
-                  required
-                />
-                <TextField
-                  name="groups"
-                  value={inputs.groups}
-                  onChange={handleChange}
-                  type="text"
-                  sx={{ marginBottom: 3, display: "block" }}
-                  placeholder="Groups"
-                  variant="outlined"
-                  required
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ marginRight: 7 }}
-                >
-                  Save
-                </Button>
-                <Button
-                  type="button"
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleClose}
-                >
-                  Cancel
-                </Button>
-              </form>
-            </Box>
-          </Modal>
+            handleSubmit={handleSubmit}
+            inputs={inputs}
+            handleChange={handleChange}
+          />
         </Toolbar>
       </Grid>
       {isLoading && (
         <Box width="400px">
-          <Typography variant="h3">Loading Data...</Typography>
+          <Typography variant="h5">Loading...</Typography>
         </Box>
       )}
       {fetchError && (

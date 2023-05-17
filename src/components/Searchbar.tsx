@@ -7,7 +7,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import React, { useState } from "react";
+import React from "react";
 
 type SearchbarProps = {
   handleSearch: (value: string, filters: string[]) => void;
@@ -15,7 +15,7 @@ type SearchbarProps = {
 };
 
 const Searchbar: React.FC<SearchbarProps> = ({ handleSearch, isChecked }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = React.useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;

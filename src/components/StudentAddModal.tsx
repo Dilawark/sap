@@ -1,5 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
-import { TextField, Button, Modal, Box } from '@mui/material';
+import { Modal , Box, TextField, Button} from '@mui/material'
+import React from 'react'
+import type { StudentTypes } from '../types/student'
+
+type StudentAddModalTypeProps = {
+    isOpen: boolean,
+    onClose: () => void,
+    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void,
+    inputs: StudentTypes,
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
 
 const style = {
     position: "absolute",
@@ -13,52 +22,7 @@ const style = {
     p: 4,
   };
 
-interface NewStudentProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (inputs: Student) => void;
-}
-
-interface Student {
-  id: number;
-  name: string;
-  sex: string;
-  dateOfBirth: string;
-  place: string;
-  groups: string;
-}
-
-const NewStudent: React.FC<NewStudentProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [inputs, setInputs] = useState<Student>({
-    id: 0,
-    name: '',
-    sex: '',
-    dateOfBirth: '',
-    place: '',
-    groups: '',
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(inputs);
-    setInputs({
-      id: 0,
-      name: '',
-      sex: '',
-      dateOfBirth: '',
-      place: '',
-      groups: '',
-    });
-    onClose();
-  };
-
+function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: StudentAddModalTypeProps) {
   return (
     <Modal
       open={isOpen}
@@ -128,7 +92,7 @@ const NewStudent: React.FC<NewStudentProps> = ({ isOpen, onClose, onSubmit }) =>
         </form>
       </Box>
     </Modal>
-  );
-};
+  )
+}
 
-export default NewStudent
+export default StudentAddModal
