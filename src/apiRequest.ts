@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:8000";
+import { API_BASE_URL } from "./routes/routes";
+
+const API_URL = `${API_BASE_URL}/students`;
 
 const apiRequest = async (url: string, options?: RequestInit) => {
   try {
@@ -38,8 +40,8 @@ export const updateStudent = async (student: any) => {
   });
 };
 
-export const deleteStudent = async (id: number) => {
-  const url = `${API_URL}/${id}`;
+export const deleteStudent = async (studentId: number) => {
+  const url = `${API_URL}/${studentId}`;
   return apiRequest(url, {
     method: 'DELETE',
   });

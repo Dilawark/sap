@@ -1,5 +1,4 @@
 import React from "react";
-import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -12,6 +11,7 @@ import { GridCellParams } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { API_BASE_URL } from "../routes/routes";
 import StudentAddModal from "./StudentAddModal";
+import { fetchStudents, addStudent, updateStudent, deleteStudent } from '../apiRequest';
 
 //<------------Change DataGrid Checkbox Color------------>
 const theme = createTheme({
@@ -39,6 +39,15 @@ type StudentTypes = {
 
 type TablePropTypes = {
   results: StudentTypes[];
+};
+
+const initialInputsState = {
+  id: 0,
+  name: "",
+  sex: "",
+  dateOfBirth: "",
+  place: "",
+  groups: "",
 };
 
 function Table({ results }: TablePropTypes) {
@@ -86,36 +95,21 @@ function Table({ results }: TablePropTypes) {
   //<------------To Update Row Functionallity------------>
   const handleUpdate = (studentId: number) => {
     const editedStudent = student.find((student) => student.id === studentId);
-
     if (editedStudent) {
-      setInputs({
-        id: editedStudent.id,
-        name: editedStudent.name,
-        sex: editedStudent.sex,
-        dateOfBirth: editedStudent.dateOfBirth,
-        place: editedStudent.place,
-        groups: editedStudent.groups,
-      });
-
+      setInputs(editedStudent);
       handleOpen();
     }
   };
 
   //<------------To Delete Row Functionallity------------>
   const handleDelete = async (studentId: number) => {
-    const updatedStudents = student.filter(
-      (student) => student.id !== studentId
-    );
-    setStudent(updatedStudents);
-    const deleteStd = { method: "DELETE" };
-    const requestUrl = `${API_URL}/${studentId}`;
-    const result = await fetch(requestUrl, deleteStd);
-    if (!result.ok) {
-      const errorResponse = await result.json();
-      const errorMessage = errorResponse.message || "An error occurred";
-      setFetchError(errorMessage);
-    } else {
+    try {
+      await deleteStudent(studentId);
+      const updatedStudents = student.filter((student) => student.id !== studentId);
+      setStudent(updatedStudents);
       setFetchError(null);
+    } catch (error: any) {
+      setFetchError(error.message);
     }
   };
 
@@ -124,26 +118,16 @@ function Table({ results }: TablePropTypes) {
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
     setIsOpen(false);
-    setInputs({
-      id: 0,
-      name: "",
-      sex: "",
-      dateOfBirth: "",
-      place: "",
-      groups: "",
-    });
+    setInputs(initialInputsState);
   };
 
   //<------------REST API to Fetch data from JSON File------------>
-  const API_URL = `${API_BASE_URL}/students`;
   const [student, setStudent] = React.useState<StudentTypes[]>([]);
 
   React.useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw Error("Didn't receive the expected data.");
-        const studentList = await response.json();
+        const studentList = await fetchStudents();
         setStudent(studentList);
         setFetchError(null);
       } catch (error: any) {
@@ -153,7 +137,7 @@ function Table({ results }: TablePropTypes) {
       }
     };
     setTimeout(() => {
-      fetchStudents();
+      fetchData();
     }, 200);
   }, []);
 
@@ -162,14 +146,7 @@ function Table({ results }: TablePropTypes) {
   const [fetchError, setFetchError] = React.useState(null);
 
   //<------------Modal Inputs useState------------>
-  const [inputs, setInputs] = React.useState<StudentTypes>({
-    id: 0,
-    name: "",
-    sex: "",
-    dateOfBirth: "",
-    place: "",
-    groups: "",
-  });
+  const [inputs, setInputs] = React.useState<StudentTypes>(initialInputsState);
 
   //<------------Form TextField Change Function------------>
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,54 +179,27 @@ function Table({ results }: TablePropTypes) {
         place: inputs.place,
         groups: inputs.groups,
       };
-      setStudent((prevStudent) => [...prevStudent, newStudent]);
-      const result = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newStudent),
-      });
-      if (!result.ok) {
-        const errorResponse = await result.json();
-        const errorMessage = errorResponse.message || "An error occurred";
-        setFetchError(errorMessage);
-      } else {
+      try {
+        await addStudent(newStudent);
         setFetchError(null);
+        setStudent((prevStudent) => [...prevStudent, newStudent]);
+      } catch (error: any) {
+        setFetchError(error.message || "An error occurred");
       }
     } else {
-      const updatedStudents = student.map((student) =>
-        student.id === inputs.id ? { ...student, ...inputs } : student
+      const updatedStudents = student.map((std) =>
+        std.id === inputs.id ? { ...std, ...inputs } : std
       );
-      setStudent(updatedStudents);
-      const updatedStudent = updatedStudents.find(
-        (std) => std.id === inputs.id
-      );
-      const update = {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedStudent),
-      };
-      const requestUrl = `${API_URL}/${inputs.id}`;
-      const result = await fetch(requestUrl, update);
-      if (!result.ok) {
-        const errorResponse = await result.json();
-        const errorMessage = errorResponse.message || "An error occurred";
-        setFetchError(errorMessage);
-      } else {
+      try {
+        await updateStudent(inputs);
         setFetchError(null);
+        setStudent(updatedStudents);
+      } catch (error: any) {
+        setFetchError(error.message || "An error occurred");
       }
     }
-    setInputs({
-      id: 0,
-      name: "",
-      sex: "",
-      dateOfBirth: "",
-      place: "",
-      groups: "",
-    });
+  
+    setInputs(initialInputsState);
     handleClose();
   };
 

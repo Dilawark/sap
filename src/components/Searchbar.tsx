@@ -9,12 +9,12 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import React, { useState } from "react";
 
-type SearchbarProps = {
+type SearchbarPropTypes = {
   handleSearch: (value: string, filters: string[]) => void;
   isChecked: string[];
 };
 
-function Searchbar({ handleSearch, isChecked }: SearchbarProps) {
+function Searchbar({ handleSearch, isChecked }: SearchbarPropTypes) {
   const [searchValue, setSearchValue] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

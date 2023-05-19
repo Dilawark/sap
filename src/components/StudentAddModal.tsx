@@ -1,28 +1,28 @@
-import { Modal , Box, TextField, Button} from '@mui/material'
-import React from 'react'
-import type { StudentTypes } from '../types/student'
+import { Modal, Box, TextField, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import React from 'react';
+import type { StudentTypes } from '../types/student';
 
 type StudentAddModalTypeProps = {
-    isOpen: boolean,
-    onClose: () => void,
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void,
-    inputs: StudentTypes,
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  isOpen: boolean,
+  onClose: () => void,
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void,
+  inputs: StudentTypes,
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
-function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: StudentAddModalTypeProps) {
+function StudentAddModal({ isOpen, onClose, handleSubmit, inputs, handleChange }: StudentAddModalTypeProps) {
   return (
     <Modal
       open={isOpen}
@@ -42,16 +42,15 @@ function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: 
             variant="outlined"
             required
           />
-          <TextField
-            name="sex"
-            value={inputs.sex}
-            onChange={handleChange}
-            type="text"
-            sx={{ marginBottom: 3, display: 'block' }}
-            placeholder="Gender"
-            variant="outlined"
-            required
-          />
+
+          <FormControl component="fieldset" sx={{ marginBottom: 2 }}>
+            <FormLabel component="legend">Gender</FormLabel>
+            <RadioGroup name="sex" value={inputs.sex} onChange={handleChange} row>
+              <FormControlLabel value="Male" control={<Radio />} label="Male" />
+              <FormControlLabel value="Female" control={<Radio />} label="Female" />
+            </RadioGroup>
+          </FormControl>
+
           <TextField
             name="place"
             value={inputs.place}
@@ -62,6 +61,7 @@ function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: 
             variant="outlined"
             required
           />
+
           <TextField
             name="dateOfBirth"
             value={inputs.dateOfBirth}
@@ -83,6 +83,7 @@ function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: 
             variant="outlined"
             required
           />
+
           <Button type="submit" variant="contained" sx={{ marginRight: 7 }}>
             Save
           </Button>
@@ -95,4 +96,4 @@ function StudentAddModal({isOpen, onClose, handleSubmit, inputs, handleChange}: 
   )
 }
 
-export default StudentAddModal
+export default StudentAddModal;
