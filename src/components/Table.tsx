@@ -1,17 +1,19 @@
 import React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { Box, Grid, Toolbar, Typography } from "@mui/material";
+import { Box, Toolbar, Typography, IconButton } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Button from "@mui/material/Button";
-import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GridCellParams } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { API_BASE_URL } from "../routes/routes";
 import StudentAddModal from "./StudentAddModal";
-import { fetchStudents, addStudent, updateStudent, deleteStudent } from '../apiRequest';
+import { useDeleteStudentMutation } from "../customeHooks/useDeleteStudents";
+import { useUpdateStudentMutation } from "../customeHooks/useUpdateStudent";
+import { useAddStudentMutation } from "../customeHooks/useAddStudent";
+import { StudentTypes } from "../types/student";
+import { useFetchStudentMutation } from "../customeHooks/useFetchStudent";
 
 //<------------Change DataGrid Checkbox Color------------>
 const theme = createTheme({
@@ -28,15 +30,6 @@ const theme = createTheme({
   },
 });
 
-type StudentTypes = {
-  id: number;
-  name: string;
-  sex: string;
-  dateOfBirth: string;
-  place: string;
-  groups: string;
-};
-
 type TablePropTypes = {
   results: StudentTypes[];
 };
@@ -51,6 +44,11 @@ const initialInputsState = {
 };
 
 function Table({ results }: TablePropTypes) {
+  //<------------Calling React Query------------>
+  const addStudentMutation = useAddStudentMutation();
+  const updateStudentMutation = useUpdateStudentMutation();
+  const deleteStudentMutation = useDeleteStudentMutation();
+
   //<------------DataDrid Columns------------>
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 60, sortable: false },
@@ -104,9 +102,7 @@ function Table({ results }: TablePropTypes) {
   //<------------To Delete Row Functionallity------------>
   const handleDelete = async (studentId: number) => {
     try {
-      await deleteStudent(studentId);
-      const updatedStudents = student.filter((student) => student.id !== studentId);
-      setStudent(updatedStudents);
+      await deleteStudentMutation.mutateAsync(studentId);
       setFetchError(null);
     } catch (error: any) {
       setFetchError(error.message);
@@ -121,28 +117,17 @@ function Table({ results }: TablePropTypes) {
     setInputs(initialInputsState);
   };
 
-  //<------------REST API to Fetch data from JSON File------------>
-  const [student, setStudent] = React.useState<StudentTypes[]>([]);
+  const { isLoading, data: studentData } = useFetchStudentMutation();
 
+  const [student, setStudent] = React.useState<StudentTypes[]>([]);
+  
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const studentList = await fetchStudents();
-        setStudent(studentList);
-        setFetchError(null);
-      } catch (error: any) {
-        setFetchError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    setTimeout(() => {
-      fetchData();
-    }, 200);
-  }, []);
+    if (studentData) {
+      setStudent(studentData);
+    }
+  }, [studentData]);
 
   //<------------User Interaction useState------------>
-  const [isLoading, setIsLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState(null);
 
   //<------------Modal Inputs useState------------>
@@ -180,25 +165,22 @@ function Table({ results }: TablePropTypes) {
         groups: inputs.groups,
       };
       try {
-        await addStudent(newStudent);
+        await addStudentMutation.mutateAsync(newStudent);
         setFetchError(null);
-        setStudent((prevStudent) => [...prevStudent, newStudent]);
       } catch (error: any) {
         setFetchError(error.message || "An error occurred");
       }
     } else {
-      const updatedStudents = student.map((std) =>
-        std.id === inputs.id ? { ...std, ...inputs } : std
-      );
+      const updatedStudent: StudentTypes = {
+        ...inputs,
+      };
       try {
-        await updateStudent(inputs);
+        await updateStudentMutation.mutateAsync(updatedStudent);
         setFetchError(null);
-        setStudent(updatedStudents);
       } catch (error: any) {
         setFetchError(error.message || "An error occurred");
       }
     }
-  
     setInputs(initialInputsState);
     handleClose();
   };
@@ -213,7 +195,7 @@ function Table({ results }: TablePropTypes) {
         height: "550px",
       }}
     >
-      <Grid container sx={{ paddingTop: "20px", paddingBottom: "40px" }}>
+      <Box sx={{ paddingTop: "20px", paddingBottom: "40px" }}>
         <Toolbar>
           <Toolbar>
             <PersonOutlineIcon />
@@ -234,7 +216,7 @@ function Table({ results }: TablePropTypes) {
             handleChange={handleChange}
           />
         </Toolbar>
-      </Grid>
+      </Box>
       {isLoading && (
         <Box width="400px">
           <Typography variant="h5">Loading...</Typography>
