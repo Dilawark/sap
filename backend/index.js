@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3500;
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/', require('./routes/studentRoutes'));
+app.use('/', require('./routes/userRoutes'));
 
 mongoose.connection.once("open", () => {
   console.log("MongoDB database connection established successfully");

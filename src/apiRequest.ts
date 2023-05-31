@@ -29,6 +29,25 @@ export const addStudent = async (student: any) => {
   });
 };
 
+export const addUser = async (user: any) => {
+  return apiRequest(`${API_BASE_URL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+};
+export const authUser = async (user: any) => {
+  return apiRequest(`${API_BASE_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+};
+
 export const updateStudent = async (student: any) => {
   const url = `${API_URL}/${student.id}`;
   return apiRequest(url, {
