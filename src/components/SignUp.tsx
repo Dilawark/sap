@@ -35,11 +35,24 @@ function SignUp () {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const { name, email, password } = signupForm;
+
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setErrorMessage(
+        "Password must contain at least one number, one special character, and be at least 8 characters long."
+      );
+      return;
+    }
+
     try {
       await addUserMutation.mutateAsync({ name, email, password });
       setSignupSuccess(true);
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || "An error occurred, Try to use another Email...");
+      setErrorMessage(
+        error.response?.data?.message ||
+          "An error occurred, Try to use another Email..."
+      );
     }
     setSignupForm({
       name: "",

@@ -119,7 +119,7 @@ function Table({ results }: TablePropTypes) {
 
   const { isLoading, data: studentData } = useFetchStudentMutation();
 
-  const [student, setStudent] = React.useState<StudentTypes[]>([]);
+  const [student, setStudent] = React.useState<StudentTypes[]>(studentData || []);
   
   React.useEffect(() => {
     if (studentData) {

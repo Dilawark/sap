@@ -9,8 +9,10 @@ import {
 
 function Nav() {
   const token = localStorage.getItem("token");
+  const name = localStorage.getItem("name");
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("name");
   };
 
   return (
@@ -25,11 +27,14 @@ function Nav() {
           </Typography>
         </Container>
         {token && (
-          <Button variant="contained" onClick={handleLogout}>
-            <Link href="/login" sx={{ color: "white" }}>
-              Logout
-            </Link>
-          </Button>
+          <Toolbar>
+            <Typography sx={{color: "black", width: "200px"}}>Welcome <span style={{fontWeight: "bold", color: "orange"}}>{name}</span></Typography>
+            <Button variant="contained" onClick={handleLogout}>
+              <Link href="/login" sx={{ color: "white" }}>
+                Logout
+              </Link>
+            </Button>
+          </Toolbar>
         )}
       </Toolbar>
     </AppBar>

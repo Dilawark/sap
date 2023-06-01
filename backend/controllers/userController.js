@@ -39,8 +39,9 @@ const authUser = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(401).json({ error: "Invalid username or password" });
     }
+    const name = user.name;
     const token = generateToken(user._id);
-    res.json({ token });
+    res.json({ token, name });
   } catch (error) {
     console.error("Authentication failed", error);
     res

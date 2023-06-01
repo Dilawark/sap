@@ -9,7 +9,7 @@ import {
   Snackbar,
   Alert
 } from "@mui/material";
-import { authUser } from "../apiRequest";
+import { useAuthUserMutation } from "../customeHooks/useAuthUser";
 
 type LoginFormTypes = {
   email: string;
@@ -17,6 +17,7 @@ type LoginFormTypes = {
 };
 
 function Login () {
+  const authUserMutation = useAuthUserMutation();
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loginForm, setLoginForm] = React.useState<LoginFormTypes>({
     email: "",
@@ -32,10 +33,12 @@ function Login () {
     event.preventDefault();
     const {email, password} = loginForm;
     try {
-      const response = await authUser({ email, password });
+      const response = await authUserMutation.mutateAsync({ email, password });
       if (response && response.token) {
         const token = response.token;
+        const name = response.name;
         localStorage.setItem("token", token);
+        localStorage.setItem("name", name);
         setLoginForm({ email: "", password: "" });
         window.location.href = '/';
       } else {
