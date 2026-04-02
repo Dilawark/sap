@@ -3,18 +3,21 @@ import Nav from "./components/Nav";
 import Searchbar from "./components/Searchbar";
 import Table from "./components/Table";
 import React from "react";
-import { useDataFetching } from "./customeHooks/useDataFetching";
-import { API_BASE_URL } from './routes/routes';
+import { useFetchStudentMutation } from "./customeHooks/useFetchStudent";
 
 function App() {
   const [isChecked, setIsChecked] = React.useState<string[]>([]);
-  const { data: students, error, isLoading } = useDataFetching(`${API_BASE_URL}/students`);
+  const { data: students } = useFetchStudentMutation();
   const [results, setResults] = React.useState([]);
 
   const handleSearch = (value: string, filters: string[]) => {
     const filteredResults = students.filter((student: any) => {
-      const nameMatch = student.name.toLowerCase().includes(value.toLowerCase());
-      const groupMatch = filters.every((filter) => student.groups.includes(filter));
+      const nameMatch = student.name
+        .toLowerCase()
+        .includes(value.toLowerCase());
+      const groupMatch = filters.every((filter) =>
+        student.groups.includes(filter)
+      );
       return nameMatch && groupMatch;
     });
     setResults(filteredResults);
@@ -22,7 +25,7 @@ function App() {
   };
 
   return (
-    <Box sx={{marginBottom: '50px'}}>
+    <Box sx={{ marginBottom: "50px" }}>
       <Nav />
       <Container>
         <Grid container sx={{ marginTop: "100px" }}>
