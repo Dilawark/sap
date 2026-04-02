@@ -46,8 +46,8 @@ function StudentAddModal({ isOpen, onClose, handleSubmit, inputs, handleChange }
           <FormControl component="fieldset" sx={{ marginBottom: 2 }}>
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup name="sex" value={inputs.sex} onChange={handleChange} row>
-              <FormControlLabel value="Male" control={<Radio />} label="Male" />
-              <FormControlLabel value="Female" control={<Radio />} label="Female" />
+              <FormControlLabel value="Male" control={<Radio color='warning' />} label="Male" />
+              <FormControlLabel value="Female" control={<Radio color='warning' />} label="Female" />
             </RadioGroup>
           </FormControl>
 
