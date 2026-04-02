@@ -9,7 +9,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GridCellParams } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { API_BASE_URL } from "../routes/routes";
 import StudentAddModal from "./StudentAddModal";
 import { fetchStudents, addStudent, updateStudent, deleteStudent } from '../apiRequest';
 
