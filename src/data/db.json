@@ -55,6 +55,23 @@
       "dateOfBirth": "2023-05-15",
       "place": "Rahim Yar Khan",
       "groups": "Web designers"
+    },
+    {
+      "name": "Dilawar Khan",
+      "email": "dilawar.khan@allzonetech.com",
+      "password": "12345678",
+      "id": 8
+    },
+    {
+      "name": "Dilawar Khan",
+      "email": "dilawarkhan47dkk@gmail.com",
+      "password": "12345678",
+      "id": 9
+    },
+    {
+      "email": "dilawarkhan47dkk@gmail.com",
+      "password": "12345678",
+      "id": 10
     }
   ]
 }
